@@ -113,7 +113,7 @@ window.bookmarklet({
 	 		
 	 		$('#OGCanvas').html('');
 	 		
-	 		var paper = Raphael('OGCanvas', $(window).width(), $(window).height());
+	 		var paper = Raphael('OGCanvas', $(window).width(), $(document).height());
 	 		
 	 		var linesX = linesY = [];
 	 		 
