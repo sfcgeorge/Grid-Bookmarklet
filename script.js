@@ -124,7 +124,7 @@ window.bookmarklet({
 		 	var strokeOpacity = $('#OGOpacity').val();
 		 	
 		 	if (verticalPX > 0) {
-		 		for (var line = 0; line < $(window).height()/verticalPX; line++) {
+		 		for (var line = 0; line < $(document).height()/verticalPX; line++) {
 			 		linesY[line] = paper.path("M0 "+(line*verticalPX)+"l"+$(window).width()+" 0");
 			 		linesY[line].attr({
 			 			'stroke': strokeColor,
