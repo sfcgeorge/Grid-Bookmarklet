@@ -137,7 +137,7 @@ window.bookmarklet({
 	 		}
 	 		if (horizontalPX > 0) {
 	 			for (var line = 0; line < ($(window).width()/horizontalPX); line++) {
-	 				linesX[line] = paper.path("M"+(line*horizontalPX)+" 0 l0 "+$(window).height());
+	 				linesX[line] = paper.path("M"+(line*horizontalPX)+" 0 l0 "+$(document).height());
 
 	 				linesX[line].attr({
 	 					'stroke': strokeColor,
