@@ -16,7 +16,7 @@ window.bookmarklet = function(opts){fullFunc(opts)};
 // These are the styles, scripts and callbacks we include in our bookmarklet:
 window.bookmarklet({
  
-	css : ['style.css'],
+	css : ['https://raw.github.com/sfcgeorge/Grid-Bookmarklet/master/style.css'],
 	js  : ['https://raw.github.com/DmitryBaranovskiy/raphael/master/raphael-min.js', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js'],    
 	ready : function(){
  		

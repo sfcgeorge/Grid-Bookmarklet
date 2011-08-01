@@ -1,1 +1,5 @@
-<a href="javascript:(function(){var head=document.getElementsByTagName('head')[0],script=document.createElement('script');script.type='text/javascript';script.src='script.js?' + Math.floor(Math.random()*99999);head.appendChild(script);})(); void 0">Grid Overlay</a>
+# Grid Overlay Bookmarklet
+
+## About
+
+This bookmarklet, once activated, overlays a customisable grid onto the current page. This can be very useful for web designers trying to line up content, or typographers trying to create vertical rhythm.
