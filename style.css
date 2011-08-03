@@ -1,8 +1,22 @@
 #OGContainer {
 	z-index: 900000000;
 }
+#OGContainer * {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+	font: 12px sans-serif;
+	line-height: 20px;
+	color: #eee;
+}
+#OGContainer div {
+	display: block;
+}
 
-#OGContainer, #OGCanvas {
+#OGContainer, #OGContainer #OGCanvas {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -10,7 +24,7 @@
 	height: 100%;
 }
 
-#OGCloseButton {
+#OGContainer #OGCloseButton {
 	position: absolute;
 	top: 2px;
 	left: 4px;
@@ -27,16 +41,15 @@
 	border-radius: 7px;
 	cursor: pointer;
 }
-#OGCloseButton:hover {
+#OGContainer #OGCloseButton:hover {
 	background: #ddd;
 }
 
-#OGOptions {
+#OGContainer #OGOptions {
 	background: #444;
 	padding: 20px 0 0 0;
 	opacity: 0.9;
 	border: 1px solid #666;
-	border-bottom: 0;
 	display: inline-block;
 	position: relative;
 	-webkit-border-top-left-radius: 5px;
@@ -45,12 +58,11 @@
 	-webkit-border-top-right-radius: 5px;
 	-moz-border-radius-topright: 5px;
 	border-top-right-radius: 5px;
-	font: 12px sans-serif;
 	-moz-box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
 	-webkit-box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
 	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
 }
-#OGOptions::before {
+#OGContainer #OGOptions::before {
 	content: "";
 	position: absolute;
 	width: 100%;
@@ -71,37 +83,85 @@
 	border-top-right-radius: 4px;
 }
 
-.OGGrid {
-	padding: 0 8px;
+#OGContainer #OGOptions .OGGrid {
+	padding: 0;
 	-moz-box-shadow: inset 0 16px 0 rgba(0, 0, 0, 0.6), inset 0 17px 0 #666;
-	-webkit-box-shadow: inset 0 16px 0 rgba(0, 0, 0, 0.6), inset 0 17px 0 #666;
-	box-shadow: inset 0 16px 0 rgba(0, 0, 0, 0.6), inset 0 17px 0 #666;
-	line-height: 16px;
-	border-bottom: 1px solid #666;
 	cursor: pointer;
-	color: #bbb;
-	text-transform: uppercase;
 	text-shadow: 0 -1px 0 #000;
+	line-height: 16px;
 }
-.OGGridOptions {
-	padding: 8px 0;
+#OGContainer #OGOptions .OGGrid span {
+	color: #bbb;
+	line-height: 20px;
+	text-transform: uppercase;
+	font-weight: bold;
+	display: block;
+	padding: 0 4px;
+}
+#OGContainer .OGGridOptions {
+	padding: 8px 20px 14px 25px;
 	cursor: default;
 	color: #eee;
 	text-shadow: none;
 	text-transform: capitalize;
 }
 
-
-#OGOptions input {
+#OGContainer #OGOptions input {
 	width: 30px;
+	height: 18px;
+	vertical-align: middle;
+	display: inline;
+	padding: 0 4px;
 	margin: 0 0 0 5px;
+	color: ;
+	background: #222;
+	outline: 0;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	border: 1px solid #111;
 }
-#OGOptions label {
+#OGContainer #OGOptions input:focus {
+	-moz-box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+	-webkit-box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+	box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+}
+#OGContainer #OGOptions label {
 	margin: 0 0 0 20px;
+	display: inline;
 }
-#OGOptions label:first-child {
+#OGContainer #OGOptions label:first-child {
 	margin: 0;
 }
-#OGOptions label:first-child input {
+#OGContainer #OGOptions label:first-child input {
 	width: 60px;
+}
+
+#OGContainer #OGOptions label a {
+	text-decoration: underline;
+}
+
+#OGContainer #OGOptions input[type="submit"], #OGContainer #OGOptions input[type="button"] {
+	width: auto;
+	height: 22px;
+	padding: 0px 6px;
+	margin: 0 0 0 20px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	border: 1px solid #111;
+	background: #222;
+	text-shadow: 0 -1px 0 #000;
+	-moz-box-shadow: inset 0 16px 16px -16px rgba(255, 255, 255, 0.5);
+	-webkit-box-shadow: inset 0 16px 16px -16px rgba(255, 255, 255, 0.5);
+	box-shadow: inset 0 16px 16px -16px rgba(255, 255, 255, 0.5);
+}
+#OGContainer #OGOptions input[type="submit"]:active, #OGContainer #OGOptions input[type="button"]:active {
+	-moz-box-shadow: inset 0 -16px 16px -16px rgba(255, 255, 255, 0.9);
+	-webkit-box-shadow: inset 0 -16px 16px -16px rgba(255, 255, 255, 0.9);
+	box-shadow: inset 0 -16px 16px -16px rgba(255, 255, 255, 0.9);
+	color: #bbb;
+}
+#OGContainer #OGOptions input[type="submit"] {
+	margin: 0;
 }

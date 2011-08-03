@@ -1,3 +1,11 @@
+/*!
+ * Run jQuery Code Bookmarklet - v0.4 - 6/25/2009
+ * http://benalman.com/projects/run-jquery-code-bookmarklet/
+ * 
+ * Copyright (c) 2009 "Cowboy" Ben Alman
+ * Licensed under the MIT license
+ * http://benalman.com/about/license/
+ */
 (function( window, document, req_version, callback, $, script, done, readystate ){
 	// If jQuery isn't loaded, or is a lower version than specified, load the
 	// specified version and call the callback, otherwise just call the callback.
@@ -78,7 +86,8 @@
 				.append( $('<form />')
 					.attr({
 						id: 'OGForm',
-						method: 'get',
+						name: 'OGForm',
+						method: 'post',
 						action: ''
 					})
 					.append( $('<div />')
@@ -97,6 +106,7 @@
 								.append( $('<input />')
 									.attr({
 										id: 'OGHorizontalColor',
+										name: 'OGHorizontalColor',
 										value: '#000'
 									})
 								)
@@ -106,6 +116,7 @@
 								.append( $('<input />')
 									.attr({
 										id: 'OGHorizontalOpacity',
+										name: 'OGHorizontalOpacity',
 										value: '0.3'
 									})
 								)
@@ -115,6 +126,7 @@
 								.append( $('<input />')
 									.attr({
 										id: 'OGHorizontalPX',
+										name: 'OGHorizontalPX',
 										value: 20
 									})
 								)
@@ -124,6 +136,7 @@
 								.append( $('<input />')
 									.attr({
 										id: 'OGHorizontalGutter',
+										name: 'OGHorizontalGutter',
 										value: 0
 									})
 								)
@@ -133,6 +146,7 @@
 								.append( $('<input />')
 									.attr({
 										id: 'OGHorizontalOffset',
+										name: 'OGHorizontalOffset',
 										value: 0
 									})
 								)
@@ -155,6 +169,7 @@
 								.append( $('<input />')
 									.attr({
 										id: 'OGVerticalColor',
+										name: 'OGVerticalColor',
 										value: '#000'
 									})
 								)
@@ -164,6 +179,7 @@
 								.append( $('<input />')
 									.attr({
 										id: 'OGVerticalOpacity',
+										name: 'OGVerticalOpacity',
 										value: '0.3'
 									})
 								)
@@ -173,6 +189,7 @@
 								.append( $('<input />')
 									.attr({
 										id: 'OGVerticalPX',
+										name: 'OGVerticalPX',
 										value: 0
 									})
 								)
@@ -182,6 +199,7 @@
 								.append( $('<input />')
 									.attr({
 										id: 'OGVerticalGutter',
+										name: 'OGVerticalGutter',
 										value: 0
 									})
 								)
@@ -191,6 +209,7 @@
 								.append( $('<input />')
 									.attr({
 										id: 'OGVerticalOffset',
+										name: 'OGVerticalOffset',
 										value: 0
 									})
 								)
@@ -200,7 +219,6 @@
 					.append( $('<div />')
 						.attr({
 							'class': 'OGGrid',
-							'style': 'display: none'
 						})
 						.append( $('<span />')
 							.html('+ Settings')
@@ -208,19 +226,37 @@
 						.append( $('<div />')
 							.attr({
 								'class': 'OGGridOptions',
-								'style': 'display: none'
+								style: 'display: none'
 							})
 							.append( $('<input />')
 								.attr({
-									'type': 'submit',
-									'value': 'Set default for page'
+									type: 'submit',
+									value: 'Set default for page',
+									id: 'OGSetDefault'
 								})
 							)
 							.append( $('<input />')
 								.attr({
-									'type': 'button',
-									'value': 'Clear default for page'
+									type: 'button',
+									value: 'Clear default for page',
+									id: 'OGClearDefault'
 								})
+							)
+							.append( $('<label />')
+								.append( $('<a />')
+									.html('About Bookmarklet')
+									.attr({
+										href: 'http://sfcgeorge.github.com/Grid-Bookmarklet/'
+									})
+								)
+							)
+							.append( $('<label />')
+								.append( $('<a />')
+									.html('by Simon George')
+									.attr({
+										href: 'http://sfcgeorge.co.uk'
+									})
+								)
 							)
 						)
 					)
@@ -236,6 +272,10 @@
 		
 		
 		
+		$('#OGClearDefault').click(function () {
+			localStorage.removeItem('OverlayGridBookmarklet');
+		});
+			
 		
 		
 		$('#OGCloseButton').click(function () {
@@ -251,17 +291,14 @@
 		});
 		
 		
-		$('.OGGrid').click(function () {
-			$(this).find('.OGGridOptions').slideToggle(300);
-			var title = $(this).find('span').html();
-			$(this).find('span').html(
+		$('.OGGrid span').click(function () {
+			$(this).parent().find('.OGGridOptions').slideToggle(300);
+			var title = $(this).html();
+			$(this).html(
 				title.charAt(0)=='-' ? title.replace('-', '+') : title.replace('+', '-')
 			);
 		});
-		$('.OGGridOptions').click(function (event) {
-			event.stopPropagation();
-			return false;
-		});	
+		
 
  		function OGRender() {
 	 		var verticalOffset = $('#OGVerticalOffset').val()*1;
@@ -349,7 +386,7 @@
 	 	
 	 	
 	 	
-	 	$('<style />').html('#OGContainer{z-index:900000000}#OGContainer,#OGCanvas{position:absolute;top:0;left:0;width:100%;height:100%}#OGCloseButton{position:absolute;top:2px;left:4px;height:14px;width:14px;background:#bbb;color:#000;text-shadow:none;text-align:center;line-height:12px;font-size:14px;-webkit-border-radius:7px;-moz-border-radius:7px;border-radius:7px;cursor:pointer}#OGCloseButton:hover{background:#ddd}#OGOptions{background:#444;opacity:0.9;border:1px solid #666;border-bottom:0;display:inline-block;position:relative;-webkit-border-top-left-radius:5px;-moz-border-radius-topleft:5px;border-top-left-radius:5px;-webkit-border-top-right-radius:5px;-moz-border-radius-topright:5px;border-top-right-radius:5px;font:12px sans-serif;-moz-box-shadow:0 4px 10px rgba(0,0,0,0.7);-webkit-box-shadow:0 4px 10px rgba(0,0,0,0.7);box-shadow:0 4px 10px rgba(0,0,0,0.7);padding:20px 0 0}#OGOptions::before{content:"";position:absolute;width:100%;height:18px;top:0;left:0;background:#111;border-bottom:1px solid #555;border-top:1px solid #999;-moz-box-shadow:inset 0 16px 16px -16px rgba(255,255,255,0.9);-webkit-box-shadow:inset 0 16px 16px -16px rgba(255,255,255,0.9);box-shadow:inset 0 16px 16px -16px rgba(255,255,255,0.9);-webkit-border-top-left-radius:4px;-moz-border-radius-topleft:4px;border-top-left-radius:4px;-webkit-border-top-right-radius:4px;-moz-border-radius-topright:4px;border-top-right-radius:4px}.OGGrid{-moz-box-shadow:inset 0 16px 0 rgba(0,0,0,0.6), inset 0 17px 0 #666;-webkit-box-shadow:inset 0 16px 0 rgba(0,0,0,0.6), inset 0 17px 0 #666;box-shadow:inset 0 16px 0 rgba(0,0,0,0.6), inset 0 17px 0 #666;line-height:16px;border-bottom:1px solid #666;cursor:pointer;color:#bbb;text-transform:uppercase;text-shadow:0 -1px 0 #000;padding:0 8px}.OGGridOptions{cursor:default;color:#eee;text-shadow:none;text-transform:capitalize;padding:8px 0}#OGOptions input{width:30px;margin:0 0 0 5px}#OGOptions label{margin:0 0 0 20px}#OGOptions label:first-child{margin:0}#OGOptions label:first-child input{width:60px}').appendTo('head');
+	 	$('<style />').html('#OGContainer{z-index:900000000}#OGContainer *{border:0;font-size:100%;vertical-align:baseline;font:12px sans-serif;line-height:20px;color:#eee;margin:0;padding:0}#OGContainer div{display:block}#OGContainer,#OGContainer #OGCanvas{position:absolute;top:0;left:0;width:100%;height:100%}#OGContainer #OGCloseButton{position:absolute;top:2px;left:4px;height:14px;width:14px;background:#bbb;color:#000;text-shadow:none;text-align:center;line-height:12px;font-size:14px;-webkit-border-radius:7px;-moz-border-radius:7px;border-radius:7px;cursor:pointer}#OGContainer #OGCloseButton:hover{background:#ddd}#OGContainer #OGOptions{background:#444;opacity:0.9;border:1px solid #666;display:inline-block;position:relative;-webkit-border-top-left-radius:5px;-moz-border-radius-topleft:5px;border-top-left-radius:5px;-webkit-border-top-right-radius:5px;-moz-border-radius-topright:5px;border-top-right-radius:5px;-moz-box-shadow:0 4px 10px rgba(0,0,0,0.7);-webkit-box-shadow:0 4px 10px rgba(0,0,0,0.7);box-shadow:0 4px 10px rgba(0,0,0,0.7);padding:20px 0 0}#OGContainer #OGOptions::before{content:"";position:absolute;width:100%;height:18px;top:0;left:0;background:#111;border-bottom:1px solid #555;border-top:1px solid #999;-moz-box-shadow:inset 0 16px 16px -16px rgba(255,255,255,0.9);-webkit-box-shadow:inset 0 16px 16px -16px rgba(255,255,255,0.9);box-shadow:inset 0 16px 16px -16px rgba(255,255,255,0.9);-webkit-border-top-left-radius:4px;-moz-border-radius-topleft:4px;border-top-left-radius:4px;-webkit-border-top-right-radius:4px;-moz-border-radius-topright:4px;border-top-right-radius:4px}#OGContainer #OGOptions .OGGrid{-moz-box-shadow:inset 0 16px 0 rgba(0,0,0,0.6), inset 0 17px 0 #666;cursor:pointer;text-shadow:0 -1px 0 #000;line-height:16px;padding:0}#OGContainer #OGOptions .OGGrid span{color:#bbb;line-height:20px;text-transform:uppercase;font-weight:700;display:block;padding:0 4px}#OGContainer .OGGridOptions{cursor:default;color:#eee;text-shadow:none;text-transform:capitalize;padding:8px 20px 14px 25px}#OGContainer #OGOptions input{width:30px;height:18px;vertical-align:middle;display:inline;background:#222;outline:0;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;border:1px solid #111;margin:0 0 0 5px;padding:0 4px}#OGContainer #OGOptions input:focus{-moz-box-shadow:0 0 5px rgba(255,255,255,0.8);-webkit-box-shadow:0 0 5px rgba(255,255,255,0.8);box-shadow:0 0 5px rgba(255,255,255,0.8)}#OGContainer #OGOptions label{display:inline;margin:0 0 0 20px}#OGContainer #OGOptions label:first-child input{width:60px}#OGContainer #OGOptions label a{text-decoration:underline}#OGContainer #OGOptions input[type=submit],#OGContainer #OGOptions input[type=button]{width:auto;height:22px;-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;border:1px solid #111;background:#222;text-shadow:0 -1px 0 #000;-moz-box-shadow:inset 0 16px 16px -16px rgba(255,255,255,0.5);-webkit-box-shadow:inset 0 16px 16px -16px rgba(255,255,255,0.5);box-shadow:inset 0 16px 16px -16px rgba(255,255,255,0.5);margin:0 0 0 20px;padding:0 6px}#OGContainer #OGOptions input[type=submit]:active,#OGContainer #OGOptions input[type=button]:active{-moz-box-shadow:inset 0 -16px 16px -16px rgba(255,255,255,0.9);-webkit-box-shadow:inset 0 -16px 16px -16px rgba(255,255,255,0.9);box-shadow:inset 0 -16px 16px -16px rgba(255,255,255,0.9);color:#bbb}#OGContainer #OGOptions label:first-child,#OGContainer #OGOptions input[type=submit]{margin:0}').appendTo('head');
 	 	
 	 	
 	 	
@@ -359,13 +396,11 @@
 	 	
 	 	
 	 	/* https://www.github.com/jas-/jQuery.handleStorage */
-	 	(function(a){a.fn.handleStorage=function(d){var k={appID:"jQuery.handleStorage",storage:"localStorage",ads:false,uuid:"",form:a(this).attr("id"),data:{}};var w={init:function(y){var x=a.extend({},k,y);if(m(x)){x.data[x.appID]=(e(x))?e(x):{};var z=c(x);if((typeof z==="object")&&(h(z)>0)){t(x,z)}a("#"+x.form).live("submit",function(A){f(x)});return true}else{return false}}};var h=function(x){var y=0;a.each(x,function(A,z){if(x.hasOwnProperty(A)){y++}});return y};var q=function(B,A,z){var y=false;B=(b(B))?B:"cookie";switch(B){case"localStorage":y=o(A,z);break;case"sessionStorage":y=I(A,z);break;case"cookie":y=u(A,z);break;default:y=o(A,z);break}return y};var n=function(A,z){var y=false;A=(b(A))?A:"cookie";switch(A){case"localStorage":y=j(z);break;case"sessionStorage":y=g(z);break;case"cookie":y=s(z);break;default:y=j(z);break}return y};var o=function(y,x){return(localStorage.setItem(y,x))?false:true};var I=function(y,x){return(sessionStorage.setItem(y,x))?false:true};var u=function(y,x){if(typeof a.cookie==="function"){return(a.cookie(y,x,{expires:7}))?true:false}else{return false}};var j=function(x){return(localStorage.getItem(x))?localStorage.getItem(x):false};var g=function(x){return(sessionStorage.getItem(x))?sessionStorage.getItem(x):false};var s=function(x){if(typeof a.cookie==="function"){return(a.cookie(x))?a.cookie(x):false}else{return false}};var e=function(x){return(n(x.storage,x.appID))?JSON.parse(n(x.storage,x.appID)):false};var c=function(A){var z={},y;if(typeof A.data[A.appID][A.form]==="object"){a.each(a("#"+A.form+" > :input"),function(B,x){if((p(x.name)!==false)&&(p(A.data[A.appID][A.form][x.name])!==false)){z[x.name]=((A.aes)&&(A.data[A.appID][A.form]["uuid"])&&(y!==false))?GibberishAES.dec(A.data[A.appID][A.form][x.name],A.data[A.appID][A.form]["uuid"]):A.data[A.appID][A.form][x.name]}})}return z};var t=function(y,x){if(h(x)>0){a.each(x,function(A,z){if((a("#"+y.form+" > input[name="+A+"]").attr("name")===A)||(a("#"+y.form+" > textarea[name="+A+"]").attr("name")===A)&&(p(z)!==false)){a("#"+y.form+" > input[name="+A+"], #"+y.form+" > textarea[name="+A+"]").val(z)}})}};var f=function(z){l(z.data);var y={};y[z.form]={};a.each(a("#"+z.form+" > :input"),function(A,x){if((p(x.value)!==false)&&(p(x.name)!==false)){if((z.aes)&&(!z.uuid)){z.uuid=v(z);y[z.form]["uuid"]=z.uuid}y[z.form][x.name]=((z.aes)&&(y[z.form]["uuid"]))?GibberishAES.enc(x.value,y[z.form]["uuid"]):x.value}});z.data[z.appID]=(h(z.data[z.appID])>0)?a.extend({},z.data[z.appID],y):y;q(z.storage,z.appID,JSON.strIngIfy(z.data[z.appID]))};var p=function(x){if(x){return((x===false)||(x.length===0)||(!x)||(x===null)||(x==="")||(typeof x==="undefined"))?false:true}else{return false}};var b=function(x){try{return((x in window)&&(window[x]))?true:false}catch(y){return false}};var m=function(y){var x=true;if(y.aes){if(!a.isFunction(GibberishAES.enc)){console.log("AES use specified but required libraries not available.Please include the Gibberish-AES libs…");x=false}}if(y.storage==="cookie"){if(!a.isFunction(a.cookie)){console.log("Cookie use specified but required libraries not available.Please include the jQuery cookie plugin…");x=false}}return x};var r=function(x){var C="0123456789abcdef".split("");var A=[],z=Math.random,B;A[8]=A[13]=A[18]=A[23]="-";A[14]="4";for(var y=0;y<36;y++){if(!A[y]){B=0|z()*16;A[y]=C[(y==19)?(B&3)|8:B&15]}}return(x!==null)?A.join("").replace(/-/g,"").split("",x).join(""):A.join("")};var v=function(A){if(A.aes){var z=(e(A))?e(A):{};z[A.form]=(z[A.form])?z[A.form]:{};var B=(p(z[A.form]["uuid"]))?z[A.form]["uuid"]:r(null);return B}};var l=function(x){a.each(x,function(z,A){if(typeof A==="object"){l(A)}else{console.log(z+" => "+A)}})};if(w[d]){return w[d].apply(this,Array.prototype.slice.call(arguments,1))}else{if((typeof d==="object")||(!d)){return w.init.apply(this,arguments)}else{a.error("Method "+d+" does not exist on "+opts.name)}}}})(jQuery);
+	 	(function(a){a.fn.handleStorage=function(d){var k={appID:"jQuery.handleStorage",storage:"localStorage",aes:false,uuid:"",form:a(this).attr("id"),data:{}};var w={init:function(y){var x=a.extend({},k,y);if(m(x)){x.data[x.appID]=(e(x))?e(x):{};var z=c(x);if((typeof z==="object")&&(h(z)>0)){t(x,z)}a("#"+x.form).live("submit",function(A){f(x)});return true}else{return false}}};var h=function(x){var y=0;a.each(x,function(A,z){if(x.hasOwnProperty(A)){y++}});return y};var q=function(B,A,z){var y=false;B=(b(B))?B:"cookie";switch(B){case"localStorage":y=o(A,z);break;case"sessionStorage":y=i(A,z);break;case"cookie":y=u(A,z);break;default:y=o(A,z);break}return y};var n=function(A,z){var y=false;A=(b(A))?A:"cookie";switch(A){case"localStorage":y=j(z);break;case"sessionStorage":y=g(z);break;case"cookie":y=s(z);break;default:y=j(z);break}return y};var o=function(y,x){return(localStorage.setItem(y,x))?false:true};var i=function(y,x){return(sessionStorage.setItem(y,x))?false:true};var u=function(y,x){if(typeof a.cookie==="function"){return(a.cookie(y,x,{expires:7}))?true:false}else{return false}};var j=function(x){return(localStorage.getItem(x))?localStorage.getItem(x):false};var g=function(x){return(sessionStorage.getItem(x))?sessionStorage.getItem(x):false};var s=function(x){if(typeof a.cookie==="function"){return(a.cookie(x))?a.cookie(x):false}else{return false}};var e=function(x){return(n(x.storage,x.appID))?JSON.parse(n(x.storage,x.appID)):false};var c=function(A){var z={},y;if(typeof A.data[A.appID][A.form]==="object"){a.each(a("#"+A.form+" :input"),function(B,x){if((p(x.name)!==false)&&(p(A.data[A.appID][A.form][x.name])!==false)){z[x.name]=((A.aes)&&(A.data[A.appID][A.form]["uuid"])&&(y!==false))?GibberishAES.dec(A.data[A.appID][A.form][x.name],A.data[A.appID][A.form]["uuid"]):A.data[A.appID][A.form][x.name]}})}return z};var t=function(y,x){if(h(x)>0){a.each(x,function(A,z){if((a("#"+y.form+" input[name="+A+"]").attr("name")===A)||(a("#"+y.form+" textarea[name="+A+"]").attr("name")===A)&&(p(z)!==false)){a("#"+y.form+" input[name="+A+"], #"+y.form+" textarea[name="+A+"]").val(z)}})}};var f=function(z){l(z.data);var y={};y[z.form]={};a.each(a("#"+z.form+" :input"),function(A,x){if((p(x.value)!==false)&&(p(x.name)!==false)){if((z.aes)&&(!z.uuid)){z.uuid=v(z);y[z.form]["uuid"]=z.uuid}y[z.form][x.name]=((z.aes)&&(y[z.form]["uuid"]))?GibberishAES.enc(x.value,y[z.form]["uuid"]):x.value}});z.data[z.appID]=(h(z.data[z.appID])>0)?a.extend({},z.data[z.appID],y):y;q(z.storage,z.appID,JSON.stringify(z.data[z.appID]))};var p=function(x){if(x){return((x===false)||(x.length===0)||(!x)||(x===null)||(x==="")||(typeof x==="undefined"))?false:true}else{return false}};var b=function(x){try{return((x in window)&&(window[x]))?true:false}catch(y){return false}};var m=function(y){var x=true;if(y.aes){if(!a.isFunction(GibberishAES.enc)){console.log("AES use specified but required libraries not available.Please include the Gibberish-AES libs...");x=false}}if(y.storage==="cookie"){if(!a.isFunction(a.cookie)){console.log("Cookie use specified but required libraries not available.Please include the jQuery cookie plugin...");x=false}}return x};var r=function(x){var C="0123456789abcdef".split("");var A=[],z=Math.random,B;A[8]=A[13]=A[18]=A[23]="-";A[14]="4";for(var y=0;y<36;y++){if(!A[y]){B=0|z()*16;A[y]=C[(y==19)?(B&3)|8:B&15]}}return(x!==null)?A.join("").replace(/-/g,"").split("",x).join(""):A.join("")};var v=function(A){if(A.aes){var z=(e(A))?e(A):{};z[A.form]=(z[A.form])?z[A.form]:{};var B=(p(z[A.form]["uuid"]))?z[A.form]["uuid"]:r(null);return B}};var l=function(x){a.each(x,function(z,A){if(typeof A==="object"){l(A)}else{console.log(z+" => "+A)}})};if(w[d]){return w[d].apply(this,Array.prototype.slice.call(arguments,1))}else{if((typeof d==="object")||(!d)){return w.init.apply(this,arguments)}else{a.error("Method "+d+" does not exist on "+opts.name)}}}})(jQuery);
 	 	
 	 	
-	 	$('#OGForm').handleStorage();
-	 	
-	 	
-	 	
+	 	$('#OGForm').handleStorage({appID:'OverlayGridBookmarklet'});
+
 	 	
 	 	
 	 	
