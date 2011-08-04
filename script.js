@@ -219,7 +219,7 @@
 					)
 					.append( $('<div />')
 						.attr({
-							'class': 'OGGrid',
+							'class': 'OGGrid'
 						})
 						.append( $('<span />')
 							.html('+ Settings')
