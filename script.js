@@ -265,7 +265,7 @@
 				.append( $('<div />')
 					.html('&times;')
 					.attr({
-						id: 'OGCloseButton',
+						id: 'OGCloseButton'
 					})
 				)
 			)
