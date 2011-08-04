@@ -32,7 +32,8 @@
 		};
 		
 		// Add the script element to either the head or body, it doesn't matter.
-		document.documentElement.childNodes[0].appendChild( script );
+		//document.documentElement.childNodes[0].appendChild( script ); //doesn't work on some sites
+		document.body.appendChild( script ); //this seems to work better
 	}
 })( window, document,
 	
