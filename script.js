@@ -1,7 +1,7 @@
 /*!
  * Run jQuery Code Bookmarklet - v0.4 - 6/25/2009
  * http://benalman.com/projects/run-jquery-code-bookmarklet/
- * 
+ *
  * Copyright (c) 2009 "Cowboy" Ben Alman
  * Licensed under the MIT license
  * http://benalman.com/about/license/
@@ -10,66 +10,66 @@
 	// If jQuery isn't loaded, or is a lower version than specified, load the
 	// specified version and call the callback, otherwise just call the callback.
 	if ( !($ = window.jQuery) || req_version > $.fn.jquery || callback( $ ) ) {
-		
+
 		// Create a script element.
 		script = document.createElement( 'script' );
 		script.type = 'text/javascript';
-		
+
 		// Load the specified jQuery from the Google AJAX API server (minified).
 		script.src = 'http://ajax.googleapis.com/ajax/libs/jquery/' + req_version + '/jquery.min.js';
-		
+
 		// When the script is loaded, remove it, execute jQuery.noConflict( true )
 		// on the newly-loaded jQuery (thus reverting any previous version to its
 		// original state), and call the callback with the newly-loaded jQuery.
 		script.onload = script.onreadystatechange = function() {
 			if ( !done && ( !( readystate = this.readyState )
 				|| readystate == 'loaded' || readystate == 'complete' ) ) {
-				
+
 				callback( ($ = window.jQuery).noConflict(1), done = 1 );
-				
+
 				$( script ).remove();
 			}
 		};
-		
+
 		// Add the script element to either the head or body, it doesn't matter.
 		//document.documentElement.childNodes[0].appendChild( script ); //doesn't work on some sites
 		document.body.appendChild( script ); //this seems to work better
 	}
 })( window, document,
-	
+
 	// Minimum jQuery version required. Change this as-needed.
 	'1.6.2',
-	
+
 	// Your jQuery code goes inside this callback. $ refers to the jQuery object,
 	// and L is a boolean that indicates whether an external jQuery file was "L"oaded.
 	function( $, L ) {
 		'$:nomunge, L:nomunge'; // Used by YUI compressor.
-		
-		
+
+
 		var jQuery = $;
-		
-		
+
+
 		/* YOUR JQUERY CODE GOES HERE */
-		
-		
+
+
 		getJS(['https://raw.github.com/DmitryBaranovskiy/raphael/master/raphael-min.js']);
-		
+
 		function getJS(jsfiles) {
 			// Check if we've processed all of the JS files (or if there are none)
 			if (jsfiles.length === 0) {
 				OGRender();
-				
+
 				return false;
 			}
-	
+
 			// Load the first js file in the array
-			$.getScript(jsfiles[0],  function(){ 
-				// When it's done loading, remove it from the queue and call the function again    
+			$.getScript(jsfiles[0],  function(){
+				// When it's done loading, remove it from the queue and call the function again
 				getJS(jsfiles.slice(1));
 			});
-		}	
-	 		
-		
+		}
+
+
 		$("body")
 		.append( $('<div />')
 			.attr({
@@ -270,28 +270,28 @@
 				)
 			)
 		);
-		
-		
-		
+
+
+
 		$('#OGClearDefault').click(function () {
 			localStorage.removeItem('OverlayGridBookmarklet');
 		});
-			
-		
-		
+
+
+
 		$('#OGCloseButton').click(function () {
 			$('#OGOptions').hide(400);
 			$('#OGCanvas').fadeOut(400, function () {
 				$('#OGContainer').remove();
 			});
 		});
-		
-		
+
+
 		$('#OGOptions input').change(function () {
 			OGRender();
 		});
-		
-		
+
+
 		$('.OGGrid span').click(function () {
 			$(this).parent().find('.OGGridOptions').slideToggle(300);
 			var title = $(this).html();
@@ -299,115 +299,115 @@
 				title.charAt(0)=='-' ? title.replace('-', '+') : title.replace('+', '-')
 			);
 		});
-		
+
 
  		function OGRender() {
 	 		var verticalOffset = $('#OGVerticalOffset').val()*1;
 	 		var horizontalOffset = $('#OGHorizontalOffset').val()*1;
-	 		
+
 	 		var verticalPX = $('#OGVerticalPX').val()*1;
 	 		var horizontalPX = $('#OGHorizontalPX').val()*1;
-	 		
+
 	 		var verticalGutter = $('#OGVerticalGutter').val()*1;
 	 		var horizontalGutter = $('#OGHorizontalGutter').val()*1;
-	 		
+
 	 		$('#OGCanvas').html('');
-	 		
+
 	 		var paper = Raphael('OGCanvas', $(window).width()-verticalOffset, $(document).height()-horizontalOffset);
-	 		
+
 	 		var linesX = linesY = rectsX = rectsY = [];
-		 	
-		 	
-		 	
+
+
+
 		 	if (verticalPX > 0) {
 			 	if (verticalGutter > 0) {
 			 		for (var line = 0; line < ($(window).width()-verticalOffset)/verticalPX; line++) {
 			 			rectsX[line] = paper.rect(line*(verticalPX+verticalGutter), 0, verticalPX, $(document).height());
-			 			
+
 			 			rectsX[line].attr({
 			 				'fill': $('#OGVerticalColor').val(),
 			 				'stroke-width': '0px',
 			 				'fill-opacity': $('#OGVerticalOpacity').val()
 			 			});
-			 			
+
 			 			$(rectsX[line].node).css('shapeRendering', 'crispEdges');
 			 		}
 			 	}
-			 	else {	
+			 	else {
 			 		for (var line = 0; line < ($(window).width()-verticalOffset)/verticalPX; line++) {
 				 		linesX[line] = paper.path("M"+(line*verticalPX)+" 0 l0 "+$(document).height());
-				 		
+
 				 		linesX[line].attr({
 				 			'stroke': $('#OGVerticalColor').val(),
 				 			'stroke-width': '1px',
 				 			'stroke-opacity': $('#OGVerticalOpacity').val()
 				 		});
-				 		
+
 				 		$(linesX[line].node).css('shapeRendering', 'crispEdges');
 		 			}
 		 		}
 	 		}
-	 		
-	 		
+
+
 	 		if (horizontalPX > 0) {
 		 		if (horizontalGutter > 0) {
 		 			for (var line = 0; line < ($(document).height()-horizontalOffset)/horizontalPX; line++) {
 		 				rectsY[line] = paper.rect(0, line*(horizontalPX+horizontalGutter), $(window).width(), horizontalPX);
-		 				
+
 		 				rectsY[line].attr({
 		 					'fill': $('#OGHorizontalColor').val(),
 		 					'stroke-width': '0px',
 		 					'fill-opacity': $('#OGHorizontalOpacity').val()
 		 				});
-		 				
+
 		 				$(rectsY[line].node).css('shapeRendering', 'crispEdges');
 		 			}
 		 		}
-		 		else {	
+		 		else {
 		 			for (var line = 0; line < ($(document).height()-horizontalOffset)/horizontalPX; line++) {
 						linesY[line] = paper.path("M0 "+(line*horizontalPX)+"l"+$(window).width()+" 0");
-						
+
 		 				linesY[line].attr({
 		 					'stroke': $('#OGHorizontalColor').val(),
 		 					'stroke-width': '1px',
 		 					'stroke-opacity': $('#OGHorizontalOpacity').val()
 		 				});
-		 				
+
 		 				$(linesY[line].node).css('shapeRendering', 'crispEdges');
 		 			}
 		 		}
 	 		}
-	 		
-	 		
+
+
 	 		$('#OGCanvas').css({
 	 			'top': horizontalOffset,
 	 			'left': verticalOffset
 	 		});
 	 	}
-	 	
-	 	
-	 	
-	 	$('<style />').html('#OGContainer{z-index:900000000}#OGContainer *{border:0;font-size:100%;vertical-align:baseline;font:12px sans-serif;line-height:20px;color:#eee;margin:0;padding:0}#OGContainer div{display:block}#OGContainer,#OGContainer #OGCanvas{position:absolute;top:0;left:0;width:100%;height:100%}#OGContainer #OGCloseButton{position:absolute;top:2px;left:4px;height:14px;width:14px;background:#bbb;color:#000;text-shadow:none;text-align:center;line-height:12px;font-size:14px;-webkit-border-radius:7px;-moz-border-radius:7px;border-radius:7px;cursor:pointer}#OGContainer #OGCloseButton:hover{background:#ddd}#OGContainer #OGOptions{background:#444;opacity:0.9;border:1px solid #666;display:inline-block;position:relative;-webkit-border-top-left-radius:5px;-moz-border-radius-topleft:5px;border-top-left-radius:5px;-webkit-border-top-right-radius:5px;-moz-border-radius-topright:5px;border-top-right-radius:5px;-moz-box-shadow:0 4px 10px rgba(0,0,0,0.7);-webkit-box-shadow:0 4px 10px rgba(0,0,0,0.7);box-shadow:0 4px 10px rgba(0,0,0,0.7);padding:20px 0 0}#OGContainer #OGOptions::before{content:"";position:absolute;width:100%;height:18px;top:0;left:0;background:#111;border-bottom:1px solid #555;border-top:1px solid #999;-moz-box-shadow:inset 0 16px 16px -16px rgba(255,255,255,0.9);-webkit-box-shadow:inset 0 16px 16px -16px rgba(255,255,255,0.9);box-shadow:inset 0 16px 16px -16px rgba(255,255,255,0.9);-webkit-border-top-left-radius:4px;-moz-border-radius-topleft:4px;border-top-left-radius:4px;-webkit-border-top-right-radius:4px;-moz-border-radius-topright:4px;border-top-right-radius:4px}#OGContainer #OGOptions .OGGrid{-moz-box-shadow:inset 0 16px 0 rgba(0,0,0,0.6), inset 0 17px 0 #666;cursor:pointer;text-shadow:0 -1px 0 #000;line-height:16px;padding:0}#OGContainer #OGOptions .OGGrid span{color:#bbb;line-height:20px;text-transform:uppercase;font-weight:700;display:block;padding:0 4px}#OGContainer .OGGridOptions{cursor:default;color:#eee;text-shadow:none;text-transform:capitalize;padding:8px 20px 14px 25px}#OGContainer #OGOptions input{width:30px;height:18px;vertical-align:middle;display:inline;background:#222;outline:0;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;border:1px solid #111;margin:0 0 0 5px;padding:0 4px}#OGContainer #OGOptions input:focus{-moz-box-shadow:0 0 5px rgba(255,255,255,0.8);-webkit-box-shadow:0 0 5px rgba(255,255,255,0.8);box-shadow:0 0 5px rgba(255,255,255,0.8)}#OGContainer #OGOptions label{display:inline;margin:0 0 0 20px}#OGContainer #OGOptions label:first-child input{width:60px}#OGContainer #OGOptions label a{text-decoration:underline}#OGContainer #OGOptions input[type=submit],#OGContainer #OGOptions input[type=button]{width:auto;height:22px;-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;border:1px solid #111;background:#222;text-shadow:0 -1px 0 #000;-moz-box-shadow:inset 0 16px 16px -16px rgba(255,255,255,0.5);-webkit-box-shadow:inset 0 16px 16px -16px rgba(255,255,255,0.5);box-shadow:inset 0 16px 16px -16px rgba(255,255,255,0.5);margin:0 0 0 20px;padding:0 6px}#OGContainer #OGOptions input[type=submit]:active,#OGContainer #OGOptions input[type=button]:active{-moz-box-shadow:inset 0 -16px 16px -16px rgba(255,255,255,0.9);-webkit-box-shadow:inset 0 -16px 16px -16px rgba(255,255,255,0.9);box-shadow:inset 0 -16px 16px -16px rgba(255,255,255,0.9);color:#bbb}#OGContainer #OGOptions label:first-child,#OGContainer #OGOptions input[type=submit]{margin:0}').appendTo('head');
-	 	
-	 	
-	 	
-	 	
-	 	
-	 	
-	 	
-	 	
+
+
+
+	 	$('<style />').html('#OGContainer{z-index:900000000;pointer-events:none;}#OGContainer*{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline;font:12px sans-serif;line-height:20px;color:#eee;}#OGContainer div{display:block;}#OGContainer,#OGContainer#OGCanvas{position:absolute;top:0;left:0;width:100%;height:100%;}#OGContainer#OGCloseButton{position:absolute;top:2px;left:4px;height:14px;width:14px;background:#bbb;color:#000;text-shadow:none;text-align:center;line-height:12px;font-size:14px;-webkit-border-radius:7px;-moz-border-radius:7px;border-radius:7px;cursor:pointer;}#OGContainer#OGCloseButton:hover{background:#ddd;}#OGContainer#OGOptions{background:#444;padding:20px 0 0 0;opacity:0.9;border:1px solid#666;display:inline-block;position:relative;-webkit-border-top-left-radius:5px;-moz-border-radius-topleft:5px;border-top-left-radius:5px;-webkit-border-top-right-radius:5px;-moz-border-radius-topright:5px;border-top-right-radius:5px;-moz-box-shadow:0 4px 10px rgba(0,0,0,0.7);-webkit-box-shadow:0 4px 10px rgba(0,0,0,0.7);box-shadow:0 4px 10px rgba(0,0,0,0.7);pointer-events:all;}#OGContainer#OGOptions::before{content:"";position:absolute;width:100%;height:18px;top:0px;left:0px;background:#111;border-bottom:1px solid#555;border-top:1px solid#999;-moz-box-shadow:inset 0 16px 16px-16px rgba(255,255,255,0.9);-webkit-box-shadow:inset 0 16px 16px-16px rgba(255,255,255,0.9);box-shadow:inset 0 16px 16px-16px rgba(255,255,255,0.9);-webkit-border-top-left-radius:4px;-moz-border-radius-topleft:4px;border-top-left-radius:4px;-webkit-border-top-right-radius:4px;-moz-border-radius-topright:4px;border-top-right-radius:4px;}#OGContainer#OGOptions.OGGrid{padding:0;-moz-box-shadow:inset 0 16px 0 rgba(0,0,0,0.6),inset 0 17px 0#666;cursor:pointer;text-shadow:0-1px 0#000;line-height:16px;}#OGContainer#OGOptions.OGGrid span{color:#bbb;line-height:20px;text-transform:uppercase;font-weight:bold;display:block;padding:0 4px;}#OGContainer.OGGridOptions{padding:8px 20px 14px 25px;cursor:default;color:#eee;text-shadow:none;text-transform:capitalize;}#OGContainer#OGOptions input{width:30px;height:18px;vertical-align:middle;display:inline;padding:0 4px;margin:0 0 0 5px;color:;background:#222;outline:0;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;border:1px solid#111;}#OGContainer#OGOptions input:focus{-moz-box-shadow:0 0 5px rgba(255,255,255,0.8);-webkit-box-shadow:0 0 5px rgba(255,255,255,0.8);box-shadow:0 0 5px rgba(255,255,255,0.8);}#OGContainer#OGOptions label{margin:0 0 0 20px;display:inline;}#OGContainer#OGOptions label:first-child{margin:0;}#OGContainer#OGOptions label:first-child input{width:60px;}#OGContainer#OGOptions label a{text-decoration:underline;}#OGContainer#OGOptions input[type="submit"],#OGContainer#OGOptions input[type="button"]{width:auto;height:22px;padding:0px 6px;margin:0 0 0 20px;-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;border:1px solid#111;background:#222;text-shadow:0-1px 0#000;-moz-box-shadow:inset 0 16px 16px-16px rgba(255,255,255,0.5);-webkit-box-shadow:inset 0 16px 16px-16px rgba(255,255,255,0.5);box-shadow:inset 0 16px 16px-16px rgba(255,255,255,0.5);}#OGContainer#OGOptions input[type="submit"]:active,#OGContainer#OGOptions input[type="button"]:active{-moz-box-shadow:inset 0-16px 16px-16px rgba(255,255,255,0.9);-webkit-box-shadow:inset 0-16px 16px-16px rgba(255,255,255,0.9);box-shadow:inset 0-16px 16px-16px rgba(255,255,255,0.9);color:#bbb;}#OGContainer#OGOptions input[type="submit"]{margin:0;}').appendTo('head');
+
+
+
+
+
+
+
+
 	 	/* https://www.github.com/jas-/jQuery.handleStorage */
 	 	(function(a){a.fn.handleStorage=function(d){var k={appID:"jQuery.handleStorage",storage:"localStorage",aes:false,uuid:"",form:a(this).attr("id"),data:{}};var w={init:function(y){var x=a.extend({},k,y);if(m(x)){x.data[x.appID]=(e(x))?e(x):{};var z=c(x);if((typeof z==="object")&&(h(z)>0)){t(x,z)}a("#"+x.form).live("submit",function(A){f(x)});return true}else{return false}}};var h=function(x){var y=0;a.each(x,function(A,z){if(x.hasOwnProperty(A)){y++}});return y};var q=function(B,A,z){var y=false;B=(b(B))?B:"cookie";switch(B){case"localStorage":y=o(A,z);break;case"sessionStorage":y=i(A,z);break;case"cookie":y=u(A,z);break;default:y=o(A,z);break}return y};var n=function(A,z){var y=false;A=(b(A))?A:"cookie";switch(A){case"localStorage":y=j(z);break;case"sessionStorage":y=g(z);break;case"cookie":y=s(z);break;default:y=j(z);break}return y};var o=function(y,x){return(localStorage.setItem(y,x))?false:true};var i=function(y,x){return(sessionStorage.setItem(y,x))?false:true};var u=function(y,x){if(typeof a.cookie==="function"){return(a.cookie(y,x,{expires:7}))?true:false}else{return false}};var j=function(x){return(localStorage.getItem(x))?localStorage.getItem(x):false};var g=function(x){return(sessionStorage.getItem(x))?sessionStorage.getItem(x):false};var s=function(x){if(typeof a.cookie==="function"){return(a.cookie(x))?a.cookie(x):false}else{return false}};var e=function(x){return(n(x.storage,x.appID))?JSON.parse(n(x.storage,x.appID)):false};var c=function(A){var z={},y;if(typeof A.data[A.appID][A.form]==="object"){a.each(a("#"+A.form+" :input"),function(B,x){if((p(x.name)!==false)&&(p(A.data[A.appID][A.form][x.name])!==false)){z[x.name]=((A.aes)&&(A.data[A.appID][A.form]["uuid"])&&(y!==false))?GibberishAES.dec(A.data[A.appID][A.form][x.name],A.data[A.appID][A.form]["uuid"]):A.data[A.appID][A.form][x.name]}})}return z};var t=function(y,x){if(h(x)>0){a.each(x,function(A,z){if((a("#"+y.form+" input[name="+A+"]").attr("name")===A)||(a("#"+y.form+" textarea[name="+A+"]").attr("name")===A)&&(p(z)!==false)){a("#"+y.form+" input[name="+A+"], #"+y.form+" textarea[name="+A+"]").val(z)}})}};var f=function(z){l(z.data);var y={};y[z.form]={};a.each(a("#"+z.form+" :input"),function(A,x){if((p(x.value)!==false)&&(p(x.name)!==false)){if((z.aes)&&(!z.uuid)){z.uuid=v(z);y[z.form]["uuid"]=z.uuid}y[z.form][x.name]=((z.aes)&&(y[z.form]["uuid"]))?GibberishAES.enc(x.value,y[z.form]["uuid"]):x.value}});z.data[z.appID]=(h(z.data[z.appID])>0)?a.extend({},z.data[z.appID],y):y;q(z.storage,z.appID,JSON.stringify(z.data[z.appID]))};var p=function(x){if(x){return((x===false)||(x.length===0)||(!x)||(x===null)||(x==="")||(typeof x==="undefined"))?false:true}else{return false}};var b=function(x){try{return((x in window)&&(window[x]))?true:false}catch(y){return false}};var m=function(y){var x=true;if(y.aes){if(!a.isFunction(GibberishAES.enc)){console.log("AES use specified but required libraries not available.Please include the Gibberish-AES libs...");x=false}}if(y.storage==="cookie"){if(!a.isFunction(a.cookie)){console.log("Cookie use specified but required libraries not available.Please include the jQuery cookie plugin...");x=false}}return x};var r=function(x){var C="0123456789abcdef".split("");var A=[],z=Math.random,B;A[8]=A[13]=A[18]=A[23]="-";A[14]="4";for(var y=0;y<36;y++){if(!A[y]){B=0|z()*16;A[y]=C[(y==19)?(B&3)|8:B&15]}}return(x!==null)?A.join("").replace(/-/g,"").split("",x).join(""):A.join("")};var v=function(A){if(A.aes){var z=(e(A))?e(A):{};z[A.form]=(z[A.form])?z[A.form]:{};var B=(p(z[A.form]["uuid"]))?z[A.form]["uuid"]:r(null);return B}};var l=function(x){a.each(x,function(z,A){if(typeof A==="object"){l(A)}else{console.log(z+" => "+A)}})};if(w[d]){return w[d].apply(this,Array.prototype.slice.call(arguments,1))}else{if((typeof d==="object")||(!d)){return w.init.apply(this,arguments)}else{a.error("Method "+d+" does not exist on "+opts.name)}}}})(jQuery);
-	 	
-	 	
+
+
 	 	$('#OGForm').handleStorage({appID:'OverlayGridBookmarklet'});
 
-	 	
-	 	
-	 	
-	 	
-	 	
-	 	
+
+
+
+
+
+
 	 	/*!
 	 	 * jQuery UI 1.8.14
 	 	 *
@@ -507,10 +507,10 @@
 	 	p||q||r||s;if(f.snapMode!="outer"){p=Math.abs(k-n)<=e;q=Math.abs(m-o)<=e;r=Math.abs(j-h)<=e;s=Math.abs(l-g)<=e;if(p)b.position.top=c._convertPositionTo("relative",{top:k,left:0}).top-c.margins.top;if(q)b.position.top=c._convertPositionTo("relative",{top:m-c.helperProportions.height,left:0}).top-c.margins.top;if(r)b.position.left=c._convertPositionTo("relative",{top:0,left:j}).left-c.margins.left;if(s)b.position.left=c._convertPositionTo("relative",{top:0,left:l-c.helperProportions.width}).left-c.margins.left}if(!c.snapElements[i].snapping&&
 	 	(p||q||r||s||t))c.options.snap.snap&&c.options.snap.snap.call(c.element,a,d.extend(c._uiHash(),{snapItem:c.snapElements[i].item}));c.snapElements[i].snapping=p||q||r||s||t}else{c.snapElements[i].snapping&&c.options.snap.release&&c.options.snap.release.call(c.element,a,d.extend(c._uiHash(),{snapItem:c.snapElements[i].item}));c.snapElements[i].snapping=false}}}});d.ui.plugin.add("draggable","stack",{start:function(){var a=d(this).data("draggable").options;a=d.makeArray(d(a.stack)).sort(function(c,f){return(parseInt(d(c).css("zIndex"),
 	 	10)||0)-(parseInt(d(f).css("zIndex"),10)||0)});if(a.length){var b=parseInt(a[0].style.zIndex)||0;d(a).each(function(c){this.style.zIndex=b+c});this[0].style.zIndex=b+a.length}}});d.ui.plugin.add("draggable","zIndex",{start:function(a,b){a=d(b.helper);b=d(this).data("draggable").options;if(a.css("zIndex"))b._zIndex=a.css("zIndex");a.css("zIndex",b.zIndex)},stop:function(a,b){a=d(this).data("draggable").options;a._zIndex&&d(b.helper).css("zIndex",a._zIndex)}})})(jQuery);
-	 	
-	 	
-	 	
-	 	
+
+
+
+
 	 	$('#OGOptions').draggable();
    	}
 );
