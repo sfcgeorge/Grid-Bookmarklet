@@ -1,6 +1,5 @@
 #OGContainer {
 	z-index: 900000000;
-	pointer-events: none;
 }
 #OGContainer * {
 	margin: 0;
@@ -62,7 +61,6 @@
 	-moz-box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
 	-webkit-box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
 	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
-	pointer-events: all;
 }
 #OGContainer #OGOptions::before {
 	content: "";
